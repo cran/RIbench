@@ -1,0 +1,47 @@
+### Generics and functions defined in this package
+
+export(	
+	"generateBiomarkerTestSets",
+	"evaluateBiomarkerTestSets",
+	"evaluateAlgorithmResults",
+	"getRI",
+	"print.RWDRI",
+	"loadTestsetDefinition",
+	"runDirectMethod",
+	"readResultsAndComputeErrors",
+	"readResultFilesAll", 
+	"computeRIsAll", 
+	"computePerfMeasAll",
+	"getSubset",
+	"getSubsetForDefinedCats", 
+	"getBenchmarkResults", 
+	"mergeAnalytes",
+	"plotBarplot", 
+	"plotScatterplot",
+	"plotBoxplot",
+	"generateScatterplotsAll", 
+	"generateBoxPlotOneAnalyte",
+	"generateBoxplotsDistTypes",
+	"generateBoxplotsMultipleCats"
+)
+
+### Packages which are imported (appearing in the Description->Imports enumeration)
+
+import( 
+	"stats", 
+	"optparse", 
+	"digest", 
+	"data.table", 
+	"graphics", 
+	"grDevices"
+)
+
+importFrom("utils", packageVersion, read.csv)
+importFrom("msm", qtnorm)
+importFrom("sfsmisc", integrate.xy)
+importFrom("RColorBrewer", brewer.pal)
+
+### exported classes
+
+
+S3method(print, RWDRI)
