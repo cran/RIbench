@@ -76,7 +76,7 @@ outFile <- gsub(".csv", replacement = paste0("_", opt$algoName,".Rdata"), opt$fi
 data <- fread(file = file.path(opt$inputBaseDir, "Data", biomarker,opt$filename))$V1
 
 # check if file was modified 
-if(digest(data, algo ="md5") != opt$uniqueHashRounded & digest(data, algo="md5") != opt$uniqueHashNotRounded)  
+if(digest(data, algo = "md5", serializeVersion = 2, ascii = TRUE) != opt$uniqueHashRounded & digest(data, algo = "md5", serializeVersion = 2, ascii =TRUE) != opt$uniqueHashNotRounded)  
 	stop("Modification of simulated test set data detected.")
 
 # convert params into list with data 
@@ -210,4 +210,3 @@ if(!opt$ris){
 # save file 
 save(fit, file = file.path(opt$outputBaseDir, "/Results/", opt$algoName, biomarker, outFile))
 fwrite(list("Index" = as.numeric(opt$index)+1, "Iteration" = 0), file.path(opt$outputBaseDir, paste0(opt$subsetDef,"_", opt$algoName,"_progressFile.csv")))
-

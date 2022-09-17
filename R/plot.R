@@ -1,4 +1,4 @@
-#' Plot method forrro generating a boxplot of the benchmark results 
+#' Plot method for generating a boxplot of the benchmark results 
 #' 
 #' @param errorList 		 containing the overall benchmark results 
 #' @param colList			(character) vector specifying the colors used for the different algorithms (should correspond to columns of benchmark results)
@@ -18,7 +18,7 @@
 #' 
 #' @author  Tatjana Ammer \email{tatjana.ammer@@roche.com}
 #' 
-plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = TRUE, withCats = FALSE, withDirect = TRUE,
+plotBoxplot <- function(errorList, colList, nameList, outline = TRUE, withMean = TRUE, withCats = FALSE, withDirect = TRUE,
 		title = "", outputDir = NULL, filename = NULL, ylim1 = c(0,100), ylim2 = c(100,1000), ...){
 	
 	# check input parameters
@@ -126,8 +126,7 @@ plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = 
 				if(!is.na(mean[[m]]) & mean[[m]] <= ylim2[1])
 					points(m, mean[m], pch = 4, col ="black", lwd = 2, cex = 1)
 			}
-		}
-		
+		}		
 		
 	}else {
 		
@@ -146,9 +145,7 @@ plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = 
 				col = colList, fill = colList, 
 				ylim = ylim2, ann =FALSE, xaxt ="n", 
 				yaxs ="i",add=TRUE,outline =outline)
-		
-		
-		
+				
 		if(withMean){
 			mean <- lapply(errorList, mean, na.rm =TRUE)
 			
@@ -174,11 +171,9 @@ plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = 
 			qqDirect <- quantile(errorList[[1]], p = c(0.25, 0.5, 0.75), na.rm =TRUE)
 			rect(xleft = -1, xright = length(errorList)+2, ybottom = qqDirect[1], ytop = qqDirect[3], col = as.rgb(colList[1], 0.8), border =NA )
 			
-		}
+		}		
 		
-		
-		addGrid()
-		
+		addGrid()		
 		
 		boxplot(x = errorList,
 				names = nameList, ylab =ylab,  las = 2, at = seq(1, length(errorList),by = 1), 
@@ -191,16 +186,11 @@ plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = 
 					points(m, mean[m], pch = 4, col ="black", lwd = 2, cex = 1)
 			}
 		}
-	}
-	
-	
+	}	
 	
 	if(!is.null(outputDir) & !is.null(filename))	
-		dev.off()
-	
-	
+		dev.off()	
 }
-
 
 
 #' Wrapper function to generate all boxplots for the specified analytes split by defined categories 
@@ -233,8 +223,7 @@ plotBoxplot <- function(errorList, colList, nameList, outline =TRUE, withMean = 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
 generateBoxplotsMultipleCats <- function(analytes, errorListAll, colList, nameList, category = c("fractionPathol","fractionPathol_cum", "N", "N_cum", "OvFreq", "OvFreq_cum"),
-		catList = NULL, catLabels = NULL, errorParam = "zzDevAbs_Ov", 
-		outline =TRUE, withMean = TRUE, withDirect=TRUE,withCats =TRUE,
+		catList = NULL, catLabels = NULL, errorParam = "zzDevAbs_Ov", outline = TRUE, withMean = TRUE, withDirect = TRUE, withCats = TRUE,
 		titlePart = NULL, outputDir = NULL, filenamePart = NULL, ylim1Vec = NULL,ylim2Vec = NULL, yticks1Vec = NULL, yticks2Vec = NULL,...){
 	
 	# check input parameters 
@@ -362,10 +351,11 @@ generateBoxplotsMultipleCats <- function(analytes, errorListAll, colList, nameLi
 				colList = colList, nameList = nameList, title = paste(aChar, titlePart), 
 				outputDir = outputDir, filename = paste0(aChar, "_",filenamePart, ".png"), ylim1 = ylim1, 
 				ylim2 = ylim2,yticks1 = yticks1, yticks2 = yticks2, 
-				outline = outline, withMean = withMean, withCats = withCats, withDirect = withDirect, ...)
-		
+				outline = outline, withMean = withMean, withCats = withCats, withDirect = withDirect, ...)		
 	}
 }
+
+
 #' Wrapper function to generate all boxplots for the specified distribution types split by defined categories 
 #' 
 #' @param errorListAll		(list) containing the overall benchmark results per algorithm 
@@ -392,8 +382,7 @@ generateBoxplotsMultipleCats <- function(analytes, errorListAll, colList, nameLi
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
 generateBoxplotsDistTypes <- function(errorListAll, colList, nameList, catList, catLabels, errorParam = "zzDevAbs_Ov", 
-		outline =TRUE, withMean = TRUE,  withDirect=TRUE,withCats =TRUE,
-		titlePart = NULL, outputDir = NULL, filenamePart = NULL, ylim1Vec = NULL, 
+		outline = TRUE, withMean = TRUE, withDirect = TRUE, withCats = TRUE, titlePart = NULL, outputDir = NULL, filenamePart = NULL, ylim1Vec = NULL, 
 		ylim2Vec = NULL, yticks1Vec = NULL, yticks2Vec = NULL, ...){
 	
 	# check input parameters 
@@ -474,10 +463,10 @@ generateBoxplotsDistTypes <- function(errorListAll, colList, nameList, catList, 
 				colList = colList, nameList = nameList, title = paste(cChar, titlePart), 
 				outputDir = outputDir, filename = paste0(cChar, "_",filenamePart, ".png"), ylim1 = ylim1, 
 				ylim2 = ylim2,yticks1 = yticks1, yticks2 = yticks2, 
-				outline = outline, withMean = withMean, withCats = withCats, withDirect = withDirect, ...)
-		
+				outline = outline, withMean = withMean, withCats = withCats, withDirect = withDirect, ...)		
 	}
 }
+
 
 #' Wrapper function to generate one boxplot for a specified analyte
 #' 
@@ -487,7 +476,7 @@ generateBoxplotsDistTypes <- function(errorListAll, colList, nameList, catList, 
 #' @param catList			(character) vector specifying the categories for which the boxes should be drawn
 #' @param catLabels			(character) vector specifying the labels to the associated categories used for the x-axis
 #' @param a					(character) specifying the analyte for which the boxplot should be generated
-#' @param errorParam			(charcter) specifying for which error measure the plot should be generated 
+#' @param errorParam		(charcter) specifying for which error measure the plot should be generated 
 #' @param outline			(logical) indicating whether outliers should be drawn (TRUE, default), or not (FALSE)
 #' @param withMean			(logical) indicating whether the mean should be plotted as well (default: TRUE) 
 #' @param withCats			(logical) set to TRUE if categories (e.g. pathological fraction) should be plotted (default: FALSE) 
@@ -503,10 +492,9 @@ generateBoxplotsDistTypes <- function(errorListAll, colList, nameList, catList, 
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-generateBoxPlotOneAnalyte <- function(errorListAll, colList, nameList, catList, catLabels, a ="Hb", errorParam, outline =TRUE, withMean =TRUE, withCats =TRUE, withDirect =TRUE, 
-		titlePart =NULL, outputDir, filenamePart =NULL, ylim1 = c(0,100), ylim2 = c(100,1000),...){
-	
-	
+generateBoxPlotOneAnalyte <- function(errorListAll, colList, nameList, catList, catLabels, a, errorParam, outline = TRUE, withMean = TRUE, withCats = TRUE, withDirect = TRUE, 
+		titlePart = NULL, outputDir, filenamePart = NULL, ylim1 = c(0,100), ylim2 = c(100,1000),...){
+		
 	# check input parameters 
 	stopifnot(is.list(errorListAll))
 	stopifnot(is.character(colList))
@@ -546,8 +534,7 @@ generateBoxPlotOneAnalyte <- function(errorListAll, colList, nameList, catList, 
 			colList = colList, nameList = nameList, title = paste(a, titlePart), 
 			outputDir = outputDir, filename = paste0(a, "_",filenamePart, ".png"), ylim1 = ylim1, 
 			ylim2 = ylim2, 
-			outline = outline, withMean = withMean, withCats =withCats, withDirect = withDirect)
-	
+			outline = outline, withMean = withMean, withCats =withCats, withDirect = withDirect)	
 }
 
 
@@ -572,8 +559,8 @@ generateBoxPlotOneAnalyte <- function(errorListAll, colList, nameList, catList, 
 #' @author  Tatjana Ammer \email{tatjana.ammer@@roche.com}
 #' 
 
-plotScatterplot <- function(errorList, colList, nameList, withColor =NULL, cats = NULL,
-		title ="", outputDir = NULL, filename =NULL, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ... ){
+plotScatterplot <- function(errorList, colList, nameList, withColor = NULL, cats = NULL,
+		title = "", outputDir = NULL, filename = NULL, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ... ){
 	
 	args <- list(...)
 	# check input parameters 
@@ -599,8 +586,7 @@ plotScatterplot <- function(errorList, colList, nameList, withColor =NULL, cats 
 		png(filename = file.path(outputDir, filename), width = 3000, height = 480, res = 140)
 	
 	par(mfrow = c(1,length(errorList)), mar = c(4.1, 4.1, 4.1, 2.1))
-	
-	
+		
 	for(e in 1:length(errorList)){
 		
 		if(is.null(withColor) | grepl("direct",nameList[e], ignore.case =TRUE)){
@@ -619,10 +605,8 @@ plotScatterplot <- function(errorList, colList, nameList, withColor =NULL, cats 
 	title(title, cex.main = 1.5, font = 2, line = -1, outer =TRUE)
 	
 	if(!is.null(outputDir) & !is.null(filename))	
-		dev.off()
-	
+		dev.off()	
 }
-
 
 
 #' Wrapper function to generate scatterplots for the specified analytes
@@ -647,9 +631,8 @@ plotScatterplot <- function(errorList, colList, nameList, withColor =NULL, cats 
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, nameList, tableTCs, errorParam = "zzDevAbs", withColorCat =NULL,
-		titlePart = NULL, outputDir = NULL, filenamePart = NULL, 
-		ylim = NULL, xlim = NULL, xlab = NULL, ylab =NULL, ... ){
+generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, nameList, tableTCs, errorParam = "zzDevAbs", withColorCat = NULL,
+		titlePart = NULL, outputDir = NULL, filenamePart = NULL, ylim = NULL, xlim = NULL, xlab = NULL, ylab = NULL, ... ){
 	
 	# check input parameters 
 	stopifnot(is.character(analytes))
@@ -760,11 +743,9 @@ generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, name
 					tmp_df 	<- merge(tmp_df, tmp_colors, by ="overlapPatholRight")
 					
 					cats <- paste0("ovR=",levels(as.factor(tmp_df$overlapPatholRight)))
-				}
+				}				
 				
-				
-				errorListAnalyte[[algoInd]] <- tmp_df
-				
+				errorListAnalyte[[algoInd]] <- tmp_df				
 			}
 			
 			if(marker =="CRP"){
@@ -813,8 +794,7 @@ generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, name
 					}
 					
 					tmp_df[,paste0(tmpErrorName, "_LRL")] <- seq(1, nrow(tmp_df), by =1)
-					errorListAnalyte[[algoInd]] <- tmp_df
-					
+					errorListAnalyte[[algoInd]] <- tmp_df					
 				}
 			}
 			
@@ -823,12 +803,9 @@ generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, name
 		plotScatterplot(errorList  = errorListAnalyte, 
 				colList = colList, nameList = nameList, title = paste(analytes[[a]], titlePart), 
 				outputDir = outputDir, filename = paste0(analytes[[a]], "_",filenamePart, ".png"), ylim = ylim,  
-				xlim = xlim, xlab = xlab, ylab = ylab, withColor = withColorCat, cats = cats, ...)
-		
+				xlim = xlim, xlab = xlab, ylab = ylab, withColor = withColorCat, cats = cats, ...)		
 	}
 }
-
-
 
 
 #' Plot method for generating a barplot out of the benchmark results 
@@ -850,8 +827,8 @@ generateScatterplotsAll <- function(analytes, errorListAll, colList = NULL, name
 #' 
 #' @author  Tatjana Ammer \email{tatjana.ammer@@roche.com}
 #' 
-plotBarplot <- function(benchmarkRes, perDistType =FALSE, colList, nameList = NULL, withLabels =FALSE, withHorizLines =FALSE, 
-		title = NULL, xlim = NULL,  xlab="Mean of Absolute Z-Score Deviations", outputDir =NULL, filename =NULL, ...){
+plotBarplot <- function(benchmarkRes, perDistType = FALSE, colList, nameList = NULL, withLabels = FALSE, withHorizLines = FALSE, 
+		title = NULL, xlim = NULL, xlab="Mean of Absolute Z-Score Deviations", outputDir = NULL, filename = NULL, ...){
 	
 	args = list(...)
 	
@@ -886,8 +863,7 @@ plotBarplot <- function(benchmarkRes, perDistType =FALSE, colList, nameList = NU
 			png(filename = file.path(outputDir,filename), width = 1000, height = 1800, res = 150)
 			par(mar = c(4.1, 10, 0.1, 1))
 		}
-	}
-	
+	}	
 	
 	cex = args$cex
 	if(is.null(cex))
@@ -992,14 +968,12 @@ plotBarplot <- function(benchmarkRes, perDistType =FALSE, colList, nameList = NU
 				legend(legendLoc, legend = rev(rownames(pTmp)), col = rev(colList),	fill = rev(colList))
 		
 			box()
-		}		
-		
+		}				
 	}
 	
 	if(!is.null(outputDir) & !is.null(filename))
 		dev.off()
 }
-
 
 
 #' Add a grid to an existing plot.
@@ -1041,6 +1015,7 @@ addGrid <- function(x = NULL, y = NULL, col = "lightgray", lwd = 1L, lty = 3L) {
 		abline(h = yticks, col = col, lwd = lwd, lty = lty)
 	}                                     
 }
+
 
 #' Convert color-names or RGB-code to possibly semi-transparent RGB-code.
 #' 
@@ -1084,3 +1059,4 @@ as.rgb <- function(col = "black", alpha = 1) {
 		return( rgb(R/255, G/255, B/255, alpha = alpha, maxColorValue = 1) )
 	}        
 }
+

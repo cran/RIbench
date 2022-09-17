@@ -11,7 +11,7 @@
 
 <meta name="author" content="Tatjana Ammer &amp; Christopher M Rank" />
 
-<meta name="date" content="2022-08-27" />
+<meta name="date" content="2022-09-16" />
 
 <title>RIbench: Benchmark Suite for the Standardized Evaluation of Indirect Methods for Reference Interval Estimation</title>
 
@@ -367,7 +367,7 @@ pre code {
 Standardized Evaluation of Indirect Methods for Reference Interval
 Estimation</h1>
 <h4 class="author">Tatjana Ammer &amp; Christopher M Rank</h4>
-<h4 class="date">2022-08-27</h4>
+<h4 class="date">2022-09-16</h4>
 
 </div>
 
@@ -431,14 +431,14 @@ library(RIbench)
 workingDir &lt;- tempdir()
 
 # generate all test sets
-generateBiomarkerTestSets(workingDir=workingDir)
+generateBiomarkerTestSets(workingDir = workingDir)
 
 # evaluate all test sets using existing or new indirect method (&#39;myOwnAlgo&#39;) 
 #    with pre-specified R-function (&#39;estimateModel&#39;) (provided by the user)
-evaluateBiomarkerTestSets(workingDir=workingDir, algoName=&#39;myOwnAlgo&#39;, algoFunction=&#39;estimateModel&#39;, libs=c(&#39;myOwnAlgo&#39;))
+evaluateBiomarkerTestSets(workingDir = workingDir, algoName = &#39;myOwnAlgo&#39;, algoFunction = &#39;estimateModel&#39;, libs = c(&#39;myOwnAlgo&#39;))
 
 # evaluate all results, create plots and compute the benchmark score
-benchmarkScore &lt;- evaluateAlgorithmResults(workingDir=workingDir, algoNames=&quot;myOwnAlgo&quot;)</code></pre>
+benchmarkScore &lt;- evaluateAlgorithmResults(workingDir = workingDir, algoNames = &quot;myOwnAlgo&quot;)</code></pre>
 <p>First, the benchmark test sets are generated and saved into a
 specified working directory
 (<strong>generateBiomarkerTestSets()</strong>). Following that, either
@@ -541,8 +541,8 @@ str(testsets)</code></pre>
 ##  $ Ov                : num  0 0 11.2 12.5 18.4 ...
 ##  $ OvFreq            : num  0 0 1.207 0.779 2.96 ...
 ##  $ RuntimeSet        : int  0 0 0 0 0 1 0 0 0 0 ...
-##  $ HashCode          : chr  &quot;938b0d2e9169adfee9f24a5af127c77d&quot; &quot;b4d76a13af0cc076ce86bf25b08e7191&quot; &quot;059140b30d2d0d9277d4c70a05760891&quot; &quot;860a5d62d351061508b5c3f30c41987c&quot; ...
-##  $ HashCodeNotRounded: chr  &quot;3dd4ac9e04a17adb28f039ee40214cd4&quot; &quot;078e4af1261cc20fec89d36c88f9368e&quot; &quot;8f535a74edab6ff0b79e7a74f0cc6412&quot; &quot;7341980168361a8948183c99bbfe0fe6&quot; ...</code></pre>
+##  $ HashCode          : chr  &quot;a80c00da90a1958b01ca1e63bb0de66a&quot; &quot;d6a83f9330cab1d5c10d6f0e6c182b66&quot; &quot;42d27ccbe3f5c59343a16a80fcd714e8&quot; &quot;f1a0115fe6d2a8bdb00c245efd0e7fb2&quot; ...
+##  $ HashCodeNotRounded: chr  &quot;18e426882acd757e7a812eb740ae0715&quot; &quot;6ab61d0a5f57bcb4e401d3c8ec45d1f2&quot; &quot;9f24d9cc8f88193b5a9fa8bd4827c829&quot; &quot;e2f9911f94be2074f8b895f10801f2de&quot; ...</code></pre>
 <p><strong>RIbench</strong> offers a convenience function to generate
 all test sets using <em>generateBiomarkerTestSets()</em>. Here, first a
 directory structure is set up and all defined biomarker test sets (or a
@@ -578,6 +578,7 @@ to 5 decimal places to mimic not rounded data</li>
 </ul>
 <pre class="r"><code># set directory from where a ./Data folder will be generated
 workingDir &lt;- tempdir()
+print(workingDir)
 # generate all test sets
 generateBiomarkerTestSets(workingDir = workingDir)</code></pre>
 </div>
@@ -631,14 +632,14 @@ e.g. <em>MyAlgoWrapper.R</em>.</p>
 <pre class="r"><code># load R-package with the indirect method to be investigated
 library(myOwnAlgo)
 
-estimateRIs &lt;- function(Data = NULL, percentiles = c(0.025,0.975), ... ){
+estimateRIs &lt;- function(Data = NULL, percentiles  = c(0.025,0.975), ... ){
     
 # PLACEHOLDER: insert your own function to estimate reference intervals here
     
 # Initialize a data frame with the specified percentiles and fill the PointEst column with the corresponding 
 # estimates obtained by your own method (RIResultMyOwnAlgo)
     
-    RIResult          &lt;- data.frame(Percentile=percentiles, PointEst=NA)
+    RIResult          &lt;- data.frame(Percentile = percentiles, PointEst = NA)
     RIResult$PointEst &lt;- RIResultMyOwnAlgo
     
     return(RIResult)
@@ -840,7 +841,7 @@ estimateRIs &lt;- function(Data = NULL, percentiles = c(0.025,0.975), ... ){
     RIResultMyOwnAlgo &lt;- findPerc(Data)
     
     # save estimations into required format
-    RIResult          &lt;- data.frame(Percentile=percentiles, PointEst=RIResultMyOwnAlgo)
+    RIResult          &lt;- data.frame(Percentile = percentiles, PointEst = RIResultMyOwnAlgo)
     
     return(RIResult)
 }
@@ -848,9 +849,9 @@ estimateRIs &lt;- function(Data = NULL, percentiles = c(0.025,0.975), ... ){
 
 # set requirePercentile to TRUE and specify the file that contains the R code for the wrapper function 
 #    for the direct estimation of reference intervals / percentiles
-evaluateBiomarkerTestSets(workingDir=workingDir, algoName=&quot;myOwnAlgo&quot;, algoFunction=&quot;estimateRIs&quot;, 
-        libs=&quot;myOwnAlgo&quot;, sourceFiles = &quot;Test_RIEst.R&quot;, 
-        requirePercentiles=TRUE) </code></pre>
+evaluateBiomarkerTestSets(workingDir = workingDir, algoName = &quot;myOwnAlgo&quot;, algoFunction = &quot;estimateRIs&quot;, 
+        libs = &quot;myOwnAlgo&quot;, sourceFiles = &quot;Test_RIEst.R&quot;, 
+        requirePercentiles = TRUE) </code></pre>
 </div>
 </div>
 </div>
@@ -914,7 +915,7 @@ with TRUE/FALSE for each algorithm</li>
 methods in the <em>algoNames</em> argument.</p>
 <pre class="r"><code># Using default parameters, this re-produces the figures shown in Ammer et al., 2022. 
 # As the results for the different algorithms do not exists, this evaluation does not work and just shows an exemplary call of the function.
-evaluateAlgorithmResults(workingDir=workingDir, algoNames=c(&quot;Hoffmann&quot;, &quot;TML&quot;, &quot;kosmic&quot;, &quot;TMC&quot;, &quot;refineR&quot;))</code></pre>
+evaluateAlgorithmResults(workingDir = workingDir, algoNames = c(&quot;Hoffmann&quot;, &quot;TML&quot;, &quot;kosmic&quot;, &quot;TMC&quot;, &quot;refineR&quot;))</code></pre>
 <p>Below, three exemplary plots created by the
 <em>evaluateAlgorithmResults()</em> function are shown. These and some
 other plots are saved in <em>workingDir/evalFolder</em>.</p>
@@ -993,13 +994,13 @@ library(RIbench)
 workingDir &lt;- tempdir()
 
 # generate all test sets
-generateBiomarkerTestSets(workingDir=workingDir, subset =3)
+generateBiomarkerTestSets(workingDir = workingDir, subset = 3)
 
 # evaluate all test sets using existing or new indirect method (&#39;myOwnAlgo&#39;) with pre-specified R-function (&#39;estimateModel&#39;)
-evaluateBiomarkerTestSets(workingDir=workingDir, algoName=&#39;refineR&#39;, algoFunction=&#39;findRI&#39;, libs=c(&#39;refineR&#39;), subset = 3)
+evaluateBiomarkerTestSets(workingDir = workingDir, algoName = &#39;refineR&#39;, algoFunction = &#39;findRI&#39;, libs = c(&#39;refineR&#39;), subset = 3)
 
 # evaluate all results, create plots and compute the benchmark score
-benchmarkScore &lt;- evaluateAlgorithmResults(workingDir=workingDir, algoNames=&quot;refineR&quot;, subset = 3)</code></pre>
+benchmarkScore &lt;- evaluateAlgorithmResults(workingDir = workingDir, algoNames = &quot;refineR&quot;, subset = 3)</code></pre>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

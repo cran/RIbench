@@ -12,15 +12,15 @@ loadTestsetDefinition <- function(){
 	fpath <- system.file("extdata","SpecificationTestSets.csv", package = "RIbench")
 	# read pre-defined table
 	tableTCs <- read.csv(file = fpath, stringsAsFactors = FALSE)
-	# check if table was modified
-	if(digest(tableTCs, algo ="md5") != "992317907eaa362e2891b245cc3bb174")
+	# check if table was modified	
+	if(digest(tableTCs, algo ="md5", serializeVersion = 2, ascii = TRUE) != "596622dd802d99452d161efab0094fd5")
 		stop("Modification of test set definitions detected.")
 	
 	return(tableTCs)
 }
 
 
-#'Convenience function to set up the directory structure used for storing data and results.
+#' Convenience function to set up the directory structure used for storing data and results.
 #'  
 #' @param outputDir		(character) specifying the base output directory. From here, Data/biomarker and Result/algoName/biomarker directories are generated			
 #' @param onlyData		(logical) if set to TRUE, only the biomarker subdirectories are generated, name of output directory is used as it is (default:FALSE)
@@ -32,7 +32,7 @@ loadTestsetDefinition <- function(){
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 #' 
-setupDirStructure <- function(outputDir = NULL, onlyData = FALSE, onlyResults = FALSE, tableTCs = NULL, algoName = NULL) {
+setupDirStructure <- function(outputDir = NULL, onlyData = FALSE, onlyResults = FALSE, tableTCs = NULL, algoName = NULL){
 	
 	# check input parameters
 	stopifnot(is.character(outputDir))
@@ -77,7 +77,7 @@ setupDirStructure <- function(outputDir = NULL, onlyData = FALSE, onlyResults = 
 #' 
 #' @author Andre Schuetzenmeister \email{andre.schuetzenmeister@@roche.com}
 
-BoxCox <- function(x, lambda) {
+BoxCox <- function(x, lambda){
 	
 	if(abs(lambda) < 1e-20)
 		x <- log(x)
@@ -123,7 +123,7 @@ invBoxCox <- function(x, lambda) {
 #' 
 #' @author Christopher Rank \email{christopher.rank@@roche.com}, Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-getRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c("fullDataEst", "medianBS", "meanBS"), truncNormal = FALSE, Scale = c("original", "transformed")) {
+getRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c("fullDataEst", "medianBS", "meanBS"), truncNormal = FALSE, Scale = c("original", "transformed")){
 	
 	stopifnot(class(x) == "RWDRI")
 	stopifnot(is.numeric(RIperc) & min(RIperc)>=0 & max(RIperc)<=1)
@@ -217,7 +217,8 @@ getRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c("full
 #' @author Christopher Rank \email{christopher.rank@@roche.com}
 #' 
 #' @method print RWDRI
-print.RWDRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c("fullDataEst", "medianBS", "meanBS"), truncNormal = FALSE, ...) {
+
+print.RWDRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c("fullDataEst", "medianBS", "meanBS"), truncNormal = FALSE, ...){
 	
 	stopifnot(class(x) == "RWDRI")
 	stopifnot(is.numeric(RIperc) & min(RIperc)>=0 & max(RIperc)<=1)
@@ -282,9 +283,9 @@ print.RWDRI <- function(x, RIperc = c(0.025, 0.975), CIprop = 0.95, pointEst = c
 #' 
 #' @author Christopher Rank \email{christopher.rank@@roche.com}
 
-generateMD5 <- function(x)
-{
-	return(digest(x, algo="md5"))
+generateMD5 <- function(x){
+	
+	return(digest(x, algo="md5", serializeVersion = 2, ascii = TRUE))
 }
 
 
@@ -301,7 +302,7 @@ generateMD5 <- function(x)
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-computeDirect <- function(N=120, analyte, params, seed = 123, NIter = 10000, RIperc = c(0.025, 0.975)) {
+computeDirect <- function(N=120, analyte, params, seed = 123, NIter = 10000, RIperc = c(0.025, 0.975)){
 	
 	df <- NULL
 	set.seed(seed, kind = "default")

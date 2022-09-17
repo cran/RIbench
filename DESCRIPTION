@@ -1,7 +1,7 @@
 Type: Package
 Package: RIbench
-Version: 1.0.0
-Date: 2022-08-27
+Version: 1.0.1
+Date: 2022-09-16
 Title: Benchmark Suite for Indirect Methods for RI Estimation
 Author: Tatjana Ammer [aut, cre],
   Christopher Rank [aut],
@@ -11,9 +11,9 @@ Authors@R: c(
 	person(given ="Tatjana", family ="Ammer", email ="tatjana.ammer@roche.com", role =c("aut", "cre")),
 	person(given ="Christopher", family = "Rank", email ="christopher.rank@roche.com", role ="aut"),
 	person(given ="Andre", family ="Schuetzenmeister", email ="andre.schuetzenmeister@roche.com", role ="aut"))
-Depends: R (>= 3.2.0)
-Imports: stats, optparse, digest, data.table, msm, graphics, grDevices,
-        RColorBrewer, sfsmisc
+Depends: R (>= 3.3.0)
+Imports: stats, optparse, digest, data.table, graphics, grDevices,
+        RColorBrewer
 Suggests: knitr, rmarkdown
 Description: The provided benchmark suite enables the automated evaluation and comparison of any existing and novel indirect method for reference interval ('RI') estimation in a systematic way.
 	Indirect methods take routine measurements of diagnostic tests, containing pathological and non-pathological samples as input and use sophisticated
@@ -26,6 +26,6 @@ Description: The provided benchmark suite enables the automated evaluation and c
 License: GPL (>= 3)
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2022-08-27 18:04:03 UTC; ammert
+Packaged: 2022-09-16 17:26:25 UTC; ammert
 Repository: CRAN
-Date/Publication: 2022-08-29 09:20:14 UTC
+Date/Publication: 2022-09-17 19:56:27 UTC

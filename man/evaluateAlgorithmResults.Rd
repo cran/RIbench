@@ -19,7 +19,7 @@ evaluateAlgorithmResults(
 )
 }
 \arguments{
-\item{workingDir}{(character) specifying the working directroy: Plots will be stored in workingDir/evalFolder and results will be used from workingDir/Results/algoName/biomarker;}
+\item{workingDir}{(character) specifying the working directory: Plots will be stored in 'workingDir/evalFolder' and results will be used from 'workingDir/Results/algoName/biomarker'}
 
 \item{algoNames}{(character) vector specifying all algorithms that should be part of the evaluation}
 

@@ -21,9 +21,9 @@ evaluateBiomarkerTestSets(
 )
 }
 \arguments{
-\item{workingDir}{(character) specifying the working directroy: Results will be stored in workingDir/Results/algo/biomarker and data will be used from workingDir/Data/biomarker}
+\item{workingDir}{(character) specifying the working directory: Results will be stored in 'workingDir/Results/algo/biomarker' and data will be used from 'workingDir/Data/biomarker'}
 
-\item{algoName}{(character) specifying the algorithm that should be called}
+\item{algoName}{(character) specifying the name of the algorithm that is evaluated}
 
 \item{algoFunction}{(character) specifying the name of the function needed for estimating RIs}
 

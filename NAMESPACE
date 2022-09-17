@@ -37,8 +37,6 @@ import(
 )
 
 importFrom("utils", packageVersion, read.csv)
-importFrom("msm", qtnorm)
-importFrom("sfsmisc", integrate.xy)
 importFrom("RColorBrewer", brewer.pal)
 
 ### exported classes

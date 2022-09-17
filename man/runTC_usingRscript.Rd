@@ -27,7 +27,7 @@ runTC_usingRscript(
 \arguments{
 \item{biomarker}{(character) specifying the biomarker for which the algorithm should calculate RIs}
 
-\item{algoName}{(character) specifying the algorithm that should be called}
+\item{algoName}{(character) specifying the name of the algorithm that is evaluated}
 
 \item{algoFunction}{(character) specifying the name of the function needed for estimating RIs}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plotBoxplot}
 \alias{plotBoxplot}
-\title{Plot method forrro generating a boxplot of the benchmark results}
+\title{Plot method for generating a boxplot of the benchmark results}
 \usage{
 plotBoxplot(
   errorList,
@@ -51,7 +51,7 @@ plotBoxplot(
 No return value. Instead, a plot is generated.
 }
 \description{
-Plot method forrro generating a boxplot of the benchmark results
+Plot method for generating a boxplot of the benchmark results
 }
 \author{
 Tatjana Ammer \email{tatjana.ammer@roche.com}

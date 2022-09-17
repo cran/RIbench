@@ -10,7 +10,7 @@ generateBoxPlotOneAnalyte(
   nameList,
   catList,
   catLabels,
-  a = "Hb",
+  a,
   errorParam,
   outline = TRUE,
   withMean = TRUE,

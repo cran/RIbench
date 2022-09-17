@@ -2,7 +2,7 @@
 % Please edit documentation in R/generateData.R
 \name{generateBiomarkerTestSets}
 \alias{generateBiomarkerTestSets}
-\title{Convenience function to generate simulated data with one start seed for each biomarker and save each test set as a separate file}
+\title{Convenience function to generate simulated data and save each test set as a separate file}
 \usage{
 generateBiomarkerTestSets(
   workingDir = "",
@@ -12,7 +12,7 @@ generateBiomarkerTestSets(
 )
 }
 \arguments{
-\item{workingDir}{(character) specifying the working directory from which a ./Data directory will be generated}
+\item{workingDir}{(character) specifying the working directory where 'workingDir/Data/biomarker' folders will be generated containing the simulated data}
 
 \item{subset}{(character, numeric, or data.frame) to specify for which subset the data should be generated and the algorithms later applied to.
 character options:    'all' (default) for all test sets;
@@ -20,18 +20,18 @@ character options:    'all' (default) for all test sets;
                 a biomarker: 'Hb', 'Ca', 'FT4', 'AST', 'LACT', 'GGT', 'TSH', 'IgE', 'CRP', 'LDH'; 
                 'Runtime' for runtime analysis subset;                     
 numeric option: number of test sets per biomarker, e.g. 10;
-data.frame: customized subset of table with test set specifications}
+data.frame: customized subset of table with test set specification}
 
-\item{rounding}{(logical) indicating whether decimal places stated in test set specifications should be applied (default, TRUE), 
-if FALSE, data will be rounded to 5 decimal places to mimic not rounded data}
+\item{rounding}{(logical) indicating whether decimal places stated in test set specification should be applied (default, TRUE), 
+if FALSE, data will be rounded to 5 decimal places to mimic unrounded data}
 
-\item{verbose}{(logical) indictaing if the progress counter should be shown (default: TRUE)}
+\item{verbose}{(logical) indicating if the progress counter should be shown (default: TRUE)}
 }
 \value{
-No return value, instead the data files are generated amd saved in the workingDir
+No return value, instead the data files are generated and saved in the workingDir
 }
 \description{
-Convenience function to generate simulated data with one start seed for each biomarker and save each test set as a separate file
+Convenience function to generate simulated data and save each test set as a separate file
 }
 \examples{
 

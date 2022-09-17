@@ -1,7 +1,7 @@
 #' Function for running test sets per algorithm per marker with calling Rscript for each test set
 #' 
 #' @param biomarker			(character) specifying the biomarker for which the algorithm should calculate RIs
-#' @param algoName			(character) specifying the algorithm that should be called
+#' @param algoName			(character) specifying the name of the algorithm that is evaluated
 #' @param algoFunction		(character) specifying the name of the function needed for estimating RIs
 #' @param libs				(list) containing all libraries needed for executing the algorithm
 #' @param sourceFiles 		(list) containing all source files needed for executing the algorithm
@@ -24,7 +24,7 @@
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
 runTC_usingRscript <- function(biomarker = NULL, algoName = "myOwnAlgo", algoFunction = "estimateModel", sourceFiles = NULL, libs =NULL, params = NULL, decimals = FALSE, ris = FALSE,
-		RIperc = c(0.025, 0.975),tableTCs = NULL, outputDir = NULL, inputDir = NULL, timeLimit = 14400, subsetDef = 'all', verbose = TRUE, showWarnings =FALSE, ...){
+		RIperc = c(0.025, 0.975), tableTCs = NULL, outputDir = NULL, inputDir = NULL, timeLimit = 14400, subsetDef = 'all', verbose = TRUE, showWarnings = FALSE, ...){
 	
 	args = list(...)
 	
@@ -37,8 +37,7 @@ runTC_usingRscript <- function(biomarker = NULL, algoName = "myOwnAlgo", algoFun
 	# convert list into string for libraries
 	if(length(libs) > 1)
 		libs <- paste0(libs, collapse=",")
-	
-		
+			
 	# convert list into string for params
 	if(is.list(params))
 		params <- unlist(params)
@@ -212,15 +211,14 @@ runTC_usingRscript <- function(biomarker = NULL, algoName = "myOwnAlgo", algoFun
 	
 	progressOut <- as.data.frame(progressOut)
 
-	return(progressOut)
-	
+	return(progressOut)	
 }
 
 
 #' Wrapper function to evaluate all test sets or a specified subset for a specified algorithm. 
 #' 
-#' @param workingDir			(character) specifying the working directroy: Results will be stored in workingDir/Results/algo/biomarker and data will be used from workingDir/Data/biomarker 
-#' @param algoName				(character) specifying the algorithm that should be called
+#' @param workingDir			(character) specifying the working directory: Results will be stored in 'workingDir/Results/algo/biomarker' and data will be used from 'workingDir/Data/biomarker' 
+#' @param algoName				(character) specifying the name of the algorithm that is evaluated
 #' @param algoFunction			(character) specifying the name of the function needed for estimating RIs
 #' @param libs					(list) containing all libraries needed for executing the algorithm
 #' @param sourceFiles 			(list) containing all source files needed for executing the algorithm
@@ -235,8 +233,8 @@ runTC_usingRscript <- function(biomarker = NULL, algoName = "myOwnAlgo", algoFun
 #' 								numeric option: number of test sets per biomarker, e.g. 10;
 #' 								data.frame: customized subset of table with test set specifications 
 #' @param timeLimit 			(integer) specifying the maximum amount of time in seconds allowed to execute one single estimation (default: 14400 sec (4h))
-#' @param verbose		(logical) indictaing if the progress counter should be shown (default: TRUE)
-#' @param showWarnings		(logical) indicating whether warnings from the call to the indirect method/algorithm should be shown (default: FALSE)
+#' @param verbose				(logical) indictaing if the progress counter should be shown (default: TRUE)
+#' @param showWarnings			(logical) indicating whether warnings from the call to the indirect method/algorithm should be shown (default: FALSE)
 #' @param ...					additional arguments to be passed to the method, e.g. specified in- and output directory ('inputDir', 'outputDir')
 #' 
 #' @return (data frame) containing information about the test sets where the algorithm terminated the R session or failed to report a result
@@ -306,9 +304,8 @@ runTC_usingRscript <- function(biomarker = NULL, algoName = "myOwnAlgo", algoFun
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
 evaluateBiomarkerTestSets <- function(workingDir = "", algoName = "refineR", algoFunction = "findRI", libs = "refineR", sourceFiles = NULL, params = NULL, requireDecimals = FALSE, requirePercentiles = FALSE, 
-		subset = "all", timeLimit = 14400, verbose = TRUE, showWarnings = FALSE, ... ){
+		subset = "all", timeLimit = 14400, verbose = TRUE, showWarnings = FALSE, ...){
 		
-	
 	args <- list(...)
 	
 	# check input parameters 	
@@ -333,7 +330,6 @@ evaluateBiomarkerTestSets <- function(workingDir = "", algoName = "refineR", alg
 	inputDir <- args$inputDir
 	if(is.null(inputDir))
 		inputDir = workingDir
-
 	
 	if(is.character(subset)){
 		tableTCs <- loadTestsetDefinition()
@@ -371,7 +367,11 @@ evaluateBiomarkerTestSets <- function(workingDir = "", algoName = "refineR", alg
 				progress_list[[i]] <- runTC_usingRscript(biomarker = analytes[i], algoName = algoName,algoFunction = algoFunction, 
 						libs = libs, sourceFiles = sourceFiles,params = params, decimals = requireDecimals, ris = requirePercentiles,
 						RIperc = RIperc, tableTCs = tableTCs, outputDir = outputDir, inputDir = inputDir, 
-						timeLimit = timeLimit, subsetDef = subsetDef, verbose = verbose, showWarnings = showWarnings, ...)
+						timeLimit = timeLimit, maxValue = maxValue, startValue = startValue,
+						subsetDef = subsetDef, verbose = verbose, showWarnings = showWarnings, ...)
+			
+				# update progress counter
+				startValue <- startValue + nrow(tableTCs[tableTCs$Analyte == analytes[i],])
 				
 				# update progress counter
 				backspaces 	<-  paste(rep("\b", 20), collapse ="")
@@ -503,16 +503,14 @@ evaluateBiomarkerTestSets <- function(workingDir = "", algoName = "refineR", alg
 	# remove progress file if one reaches this point of the computation
 	if (file.exists(file.path(outputDir, paste0(subsetDef, "_", algoName, fileEnding))) )
 		file.remove(file.path(outputDir, paste0(subsetDef, "_", algoName, fileEnding)))
-
 		
-	return(progress_list)
-	
+	return(progress_list)	
 }
 
 
 #' Helper function to write result file when time out occured or R session terminated
 #' 
-#' @param algoName			(character) specifying the algorithm that should be called
+#' @param algoName			(character) specifying the name of the algorithm that is evaluated
 #' @param biomarker			(character) specifying the biomarker for which the algorithm should calculate RIs
 #' @param N 				(numeric) specifying the number of input data points
 #' @param error				(character) specifying the type of error (e.g. timeout, RSessionTerminated)
@@ -521,7 +519,7 @@ evaluateBiomarkerTestSets <- function(workingDir = "", algoName = "refineR", alg
 #' @param outputDir			(character) specifying the outputDir: Data files should be stored in outputDir/Data/biomarker and Results will be stored in outputDir/Results/algo/biomarker
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
-#' 
+
 writeResFile <- function(algoName, biomarker, N = 0, error = NULL, runtime = NULL, filename = NULL, outputDir = NULL){
 	
 	obj 				<- list()
@@ -544,6 +542,6 @@ writeResFile <- function(algoName, biomarker, N = 0, error = NULL, runtime = NUL
 	class(obj)			<- "RWDRI"
 	
 	outFile <- gsub(".csv", replacement = paste0("_", algoName,".Rdata"), filename)
-	save(obj, file = file.path(outputDir, "/Results/", algoName, biomarker, outFile))
-	
+	save(obj, file = file.path(outputDir, "/Results/", algoName, biomarker, outFile))	
 }
+

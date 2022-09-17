@@ -1,7 +1,7 @@
 
 #'Convenience Function to generate all result plots and calculate the benchmark score 
 #' 
-#' @param workingDir		(character) specifying the working directroy: Plots will be stored in workingDir/evalFolder and results will be used from workingDir/Results/algoName/biomarker; 
+#' @param workingDir		(character) specifying the working directory: Plots will be stored in 'workingDir/evalFolder' and results will be used from 'workingDir/Results/algoName/biomarker' 
 #' @param algoNames			(character) vector specifying all algorithms that should be part of the evaluation
 #' @param subset			(character, numeric, or data.frame) to specify for which subset the algorithm should be evaluated. 
 #' 							character options:	'all' (default) for all test sets,
@@ -67,11 +67,10 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 	stopifnot(is.numeric(cutoffZ))
 	stopifnot(is.null(cols) | is.character(cols))
 	
-	stopifnot(names(args) %in% c("colDirect","truncNormal"))	# stop if args contains something else than colDirect or truncNormal
+	stopifnot(names(args) %in% c("colDirect","truncNormal", "ylab","perfCombination"))	# stop if args contains something else than colDirect, ylab, truncNormal, or perfCombination
 	
 	errorParam <- match.arg(errorParam[1], choices =c("zzDevAbs_Ov", "AbsPercError_Ov", "AbsError_Ov"))
-	
-	
+		
 	colDirect <- "grey"
 	if(!is.null(args$colDirect))
 		colDirect = args$colDirect
@@ -86,8 +85,6 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 	else if(errorParam =="AbsError_Ov")
 		ylab = "Absolute Error"
 	
-	
-
 	truncNormal <- FALSE
 	if(!is.null(args$truncNormal)){
 		stopifnot(is.logical(args$truncNormal))
@@ -95,6 +92,11 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		truncNormal <- args$truncNormal
 	}
 		
+	
+	perfCombination = "mean"
+	if(!is.null(args$perfCombination))
+		perfCombination <- args$perfCombination
+	
 	# set up evaluation directory
 	if(!dir.exists(file.path(workingDir,evalFolder))){
 		dir.create(path =file.path(workingDir, evalFolder),recursive =TRUE)
@@ -158,8 +160,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 	if (is.null(cols)){
 		cols = topo.colors(n = length(algoNames))
 	}
-		
-		
+			
 	errorList    <- NULL
 	errorListRIs <- NULL
 	
@@ -186,8 +187,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 	
 	names(errorList) 	<- algoNames
 	names(errorListRIs) <- algoNames
-	
-	
+		
 	# run direct method if specified 
 	if(withDirect){
 		message("Simulate direct method ... ")
@@ -204,7 +204,6 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 	
 	message("Generate plots ... ")
 	# generate plots manuscript 
-
 
 	if(is.data.frame(subset) || (subset == "all" | subset == "normal" | subset == "skewed" | subset == "heavilySkewed" | subset == "shifted" | subset == "Runtime" | is.numeric(subset) )) {
 		message("Distributon types")
@@ -273,7 +272,6 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 			nCats 	 	<- length(error_subsetDistP[[2]][[1]])
 			catLabelsP 	<- names(error_subsetDistP[[2]][[1]])
 		}
-
 		
 		nameListP <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste(x, catLabelsP)}))
 		colListP  <- unlist(lapply(cols[-1], function(x) {rep(x, nCats)}))
@@ -291,8 +289,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 				outputDir    = outputDir, 
 				filenamePart = "performance_PathologicalFraction_DistTypes"
 		)
-		
-		
+				
 		message("Distribution types and split by sample size")
 		
 		# generate boxplots per distribution type split by sample size
@@ -327,8 +324,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 			nCats 		<- length(error_subsetDistN[[2]][[1]])
 			catLabelsN 	<- names(error_subsetDistN[[2]][[1]])
 		}
-		
-		
+				
 		nameListN <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste(x, catLabelsN)}))
 		colListN  <- unlist(lapply(cols[-1], function(x) {rep(x, nCats)}))
 		
@@ -349,7 +345,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		message("benchmark score ")
 		
 		# compute benchmark score results table
-		ovRes <- getBenchmarkResults(errorList = errorList[-1], nameVec = names(errorList)[-1], tableTCs = tableTCs) 
+		ovRes <- getBenchmarkResults(errorList = errorList[-1], nameVec = names(errorList)[-1], tableTCs = tableTCs, cutoffZ = cutoffZ, perfCombination = perfCombination) 
 		
 		# generate bar plot 
 		plotBarplot(benchmarkRes = ovRes, perDistType = FALSE, colList = cols[-1], nameList = algoNames,
@@ -358,8 +354,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 				filename ="Barplot_BenchmarkScoreResults.png"
 		)
 	} else if (subset %in% c("Hb", "Ca", "FT4", "AST", "LACT", "GGT", "TSH", "IgE", "CRP", "LDH")){
-	
-		
+			
 		message("Plots for analytes")
 		# get results for analytes
 		analytes <- unique(tableTCs$Analyte)
@@ -382,7 +377,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		)
 		
 		message("Plot for analyte split by pathological fraction")
-# generate boxplots per distribution type split by pathological fraction
+		# generate boxplots per distribution type split by pathological fraction
 		
 		error_subsetP <- list()
 		error_subsetP[[1]] <- errorListRIs[[1]]
@@ -399,10 +394,9 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		nCats      <- length(error_subsetP[[2]][[1]])
 		catLabelsP <- names(error_subsetP[[2]][[1]])
 		
-		nameListP <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste0("", catLabelsP)}))
+		nameListP <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste(x, catLabelsP)}))
 		colListP  <- unlist(lapply(cols[-1], function(x) {rep(x, nCats)}))
-		
-		
+				
 		generateBoxplotsMultipleCats(analytes = analytes, 
 				errorListAll = error_subsetP,
 				colList    = c(colDirect, colListP),
@@ -433,7 +427,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		nCats 		<- length(error_subsetN[[2]][[1]])
 		catLabelsN 	<- names(error_subsetN[[2]][[1]])
 		
-		nameListN <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste0("", catLabelsN)}))
+		nameListN <- unlist(lapply(names(errorListRIs)[-1], function(x) {paste(x, catLabelsN)}))
 		colListN  <- unlist(lapply(cols[-1], function(x) {rep(x, nCats)}))
 		
 		generateBoxplotsMultipleCats(analytes = analytes, 
@@ -455,10 +449,8 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 		ovRes <- NULL
 	}
 	
-	return(ovRes)
-	
+	return(ovRes)	
 }
-
 
 
 #' Function for reading in the result files for one marker 
@@ -472,7 +464,7 @@ evaluateAlgorithmResults <- function(workingDir = "", algoNames = NULL, subset =
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-readResultFiles <- function(analyte, algo, path = NULL,  tableTCs = NULL){
+readResultFiles <- function(analyte, algo, path = NULL, tableTCs = NULL){
 	
 	inputDir 	<- file.path(path, algo, analyte)
 	
@@ -495,8 +487,7 @@ readResultFiles <- function(analyte, algo, path = NULL,  tableTCs = NULL){
 		tmp 			 <- get(load(file.path(inputDir, filename)))
 		tmp$Index 		 <- testDef$Index
 		results[[as.character(testDef$Index)]] <- tmp	
-	}
-	
+	}	
 	
 	return(results)
 }
@@ -515,7 +506,7 @@ readResultFiles <- function(analyte, algo, path = NULL,  tableTCs = NULL){
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-readResultFilesAll <- function(analytes, algo, baseDir =NULL, inputDir = NULL, tableTCs){
+readResultFilesAll <- function(analytes, algo, baseDir = NULL, inputDir = NULL, tableTCs){
 	
 	stopifnot(is.character(analytes))
 	stopifnot(is.character(algo))
@@ -555,7 +546,7 @@ readResultFilesAll <- function(analytes, algo, baseDir =NULL, inputDir = NULL, t
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-computeRIs <- function(analyte, algo, results, tableTCs, RIperc = c(0.025, 0.975), truncNormal =FALSE){
+computeRIs <- function(analyte, algo, results, tableTCs, RIperc = c(0.025, 0.975), truncNormal = FALSE){
 	
 	# set up resulting data frame 
 	resDf 			<- data.frame(matrix(nrow = length(results), ncol = 21))
@@ -596,8 +587,7 @@ computeRIs <- function(analyte, algo, results, tableTCs, RIperc = c(0.025, 0.975
 			model$Runtime 	<- c(NA,NA,NA)
 			resDf[i,]$Index <- index[1]
 			resDf[i,c("LRL","URL")]	<- ris$PointEst
-			
-			
+						
 		}else {
 			# if a model was found, compute the reference intervals
 			resDf[i,]$Index <- index
@@ -624,16 +614,14 @@ computeRIs <- function(analyte, algo, results, tableTCs, RIperc = c(0.025, 0.975
 			
 			if(is.null(model$P))
 				model$P <- NA
-		}
-		
+		}		
 	
 		# save all estimated parameters into the resulting data frame 
 		resDf[i,c("Est_Lambda", "Est_Mu", "Est_Sigma", "Est_Shift", "Est_A", "Est_B","Est_Cost", "Est_P", "Runtime")] <- c(model$Lambda, model$Mu, model$Sigma, model$Shift, model$abOr[1], model$abOr[2], model$Cost, model$P, model$Runtime[3])
 		resDf[i, "Status"] <- model$Status
 	}
 	
-	return(resDf)
-	
+	return(resDf)	
 }
 
 
@@ -649,7 +637,7 @@ computeRIs <- function(analyte, algo, results, tableTCs, RIperc = c(0.025, 0.975
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-computeRIsAll <- function(analytes, algo, resIn, tableTCs, truncNormal =FALSE){
+computeRIsAll <- function(analytes, algo, resIn, tableTCs, truncNormal = FALSE){
 	
 	stopifnot(is.character(analytes))
 	stopifnot(is.character(algo))
@@ -672,7 +660,6 @@ computeRIsAll <- function(analytes, algo, resIn, tableTCs, truncNormal =FALSE){
 	names(risList) <- analytes
 	return(risList)
 }
-
 
 
 #' Function for retrieving reference intervals if directly computed
@@ -722,7 +709,7 @@ getRIsAllwithoutModel <- function(analytes, algo, resIn, tableTCs){
 				resDf[i,c("LRL","URL")] <- c(0, model$PointEst)
 			else
 				resDf[i,c("LRL","URL")]	<- model$PointEst
-#			
+			
 			abOr <- model$abOr
 			
 			if(is.null(model$abOr))
@@ -808,8 +795,7 @@ computePerfMeas <- function(analyte, algo, resRIs, subTable, RIperc = c(0.025, 0
 				
 	} else {
 		resRIs$zzLRL_Est <- (BoxCox(resRIs$LRL - subTable$nonp_shift[1], lambda = subTable$nonp_lambda[1])-subTable$nonp_mu[1])/subTable$nonp_sigma[1]
-	}
-	
+	}	
 	
 	if(any(resRIs$URL == 0 & !is.na(resRIs$URL))){
 		tmp <- resRIs
@@ -831,7 +817,6 @@ computePerfMeas <- function(analyte, algo, resRIs, subTable, RIperc = c(0.025, 0
 	
 	if(analyte == "CRP")
 		resRIs$zzDev_Ov <- resRIs$zzDev_URL 
-
 	
 	resRIs$zzDevAbs_LRL <- abs(resRIs$zzDev_LRL)
 	resRIs$zzDevAbs_URL <- abs(resRIs$zzDev_URL)
@@ -839,8 +824,7 @@ computePerfMeas <- function(analyte, algo, resRIs, subTable, RIperc = c(0.025, 0
 	
 	if(analyte == "CRP")
 		resRIs$zzDevAbs_Ov <- resRIs$zzDevAbs_URL 
-	
-	
+		
 	resRIs$zzDevAbsCutoff_Ov <- resRIs$zzDevAbs_Ov
 	resRIs$zzDevAbsCutoff_Ov[resRIs$zzDevAbsCutoff_Ov > cutoffZ & !is.na(resRIs$zzDevAbsCutoff_Ov)] <- NA
 	
@@ -927,8 +911,7 @@ computePerfMeasAll <- function(analytes, algo, risIn, tableTCs, cutoffZ = 5){
 	stopifnot(is.list(risIn))
 	stopifnot(is.data.frame(tableTCs))
 	stopifnot(is.numeric(cutoffZ))
-	
-	
+		
 	tmp 	  <- list()
 	errorList <- list()
 	errorDF   <- NULL
@@ -945,9 +928,9 @@ computePerfMeasAll <- function(analytes, algo, risIn, tableTCs, cutoffZ = 5){
 		
 		tmp[[a]] 		<- computePerfMeas(analyte = as.character(analytes[[a]]), algo = algo, resRIs = ris, subTable = subTable, RIperc = RIperc, cutoffZ = cutoffZ)
 		errorDF			<- rbind(errorDF, tmp[[a]]$summaryErrors)
-		errorList[[a]] 	<- tmp[[a]]$resRIs
-		
+		errorList[[a]] 	<- tmp[[a]]$resRIs	
 	}
+	
 	names(errorList) <- analytes
 	
 	errorDF[,3:45] <- sapply(errorDF[,3:45], as.numeric)
@@ -966,8 +949,7 @@ computePerfMeasAll <- function(analytes, algo, risIn, tableTCs, cutoffZ = 5){
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
 getRuntime <- function(x, analyte){
-	
-	
+		
 	runtimeDf <- data.frame("Analyte" = analyte, "Min" = min(x$Runtime, na.rm =TRUE), "Mean" = mean(x$Runtime, na.rm =TRUE), 
 			"Median" = median(x$Runtime, na.rm =TRUE),"Max" = max(x$Runtime, na.rm =TRUE))
 	
@@ -1026,7 +1008,7 @@ computeRuntimeAll <- function(analytes, algo, risIn, tableTCs){
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-getSubset <- function(subsetDef, distType =FALSE, tableTCs, errorList, category = c("fractionPathol","fractionPathol_cum", "N", "N_cum", "OvFreq", "OvFreq_cum"), restrict =NULL){
+getSubset <- function(subsetDef, distType = FALSE, tableTCs, errorList, category = c("fractionPathol","fractionPathol_cum", "N", "N_cum", "OvFreq", "OvFreq_cum"), restrict = NULL){
 	
 	# check input parameters
 	stopifnot(is.character(subsetDef))
@@ -1067,19 +1049,13 @@ getSubset <- function(subsetDef, distType =FALSE, tableTCs, errorList, category 
 	} else if (category == "OvFreq_cum") {
 		
 		catList	  <- c("OvFreq <= 5", "OvFreq > 5 & OvFreq <= 10", "OvFreq > 10 & OvFreq <= 20", "OvFreq > 20 & OvFreq <= 30", "OvFreq > 30")
-		catLabels <- c("OvFreq <=5", "OvFreq >5 & <=10", "OvFreq >10 & <=20", "OvFreq >20 & <=30", "OvFreq >30")
-		
-	}
-	
+		catLabels <- c("OvFreq <=5", "OvFreq >5 & <=10", "OvFreq >10 & <=20", "OvFreq >20 & <=30", "OvFreq >30")		
+	}	
 	
 	subsetList <- getSubsetForDefinedCats(subsetDef = subsetDef, distType =distType, tableTCs = tableTCs, 
 			errorList = errorList, catList = catList, catLabels = catLabels, restrict = restrict)
-		
 	
-
-	return(subsetList)
-	
-	
+	return(subsetList)	
 }
 
 
@@ -1098,9 +1074,8 @@ getSubset <- function(subsetDef, distType =FALSE, tableTCs, errorList, category 
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-getSubsetForDefinedCats <- function(subsetDef, distType =FALSE, tableTCs, errorList, catList = NULL, catLabels = NULL, restrict = NULL){
-	
-	
+getSubsetForDefinedCats <- function(subsetDef, distType = FALSE, tableTCs, errorList, catList = NULL, catLabels = NULL, restrict = NULL){
+		
 	# check input parameters
 	stopifnot(is.character(subsetDef))
 	stopifnot(subsetDef %in% c("normal","skewed", "heavilySkewed", "shifted", "Hb", "Ca", "FT4", "AST", "LACT", "GGT", "TSH", "IgE", "CRP", "LDH"))
@@ -1110,8 +1085,7 @@ getSubsetForDefinedCats <- function(subsetDef, distType =FALSE, tableTCs, errorL
 	stopifnot(!is.null(catList))
 	stopifnot(length(catList) == length(catLabels))
 	stopifnot(is.null(restrict) | is.character(restrict))
-	
-	
+		
 	subsetList <- NULL
 
 	# traverse either analytes or distribution types 
@@ -1147,8 +1121,7 @@ getSubsetForDefinedCats <- function(subsetDef, distType =FALSE, tableTCs, errorL
 	
 	names(subsetList) <- subsetDef
 	
-	return(subsetList)
-	
+	return(subsetList)	
 }
 
 
@@ -1164,7 +1137,8 @@ getSubsetForDefinedCats <- function(subsetDef, distType =FALSE, tableTCs, errorL
 #' @return	(list) containing the merged performance measurements grouped according to specified category 
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
-restrictSet <- function(overallCat, tableTCs, errorList, distType =TRUE, restrict = NULL){
+
+restrictSet <- function(overallCat, tableTCs, errorList, distType = TRUE, restrict = NULL){
 	
 	subsetList <- NULL
 	
@@ -1190,8 +1164,7 @@ restrictSet <- function(overallCat, tableTCs, errorList, distType =TRUE, restric
 	
 	names(subsetList) <- overallCat
 	
-	return(subsetList)
-	
+	return(subsetList)	
 }
 
 
@@ -1210,7 +1183,7 @@ restrictSet <- function(overallCat, tableTCs, errorList, distType =TRUE, restric
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-mergeAnalytes <- function(tableTCs, errorList, catList = NULL, catLabels = NULL, distTypes =TRUE){
+mergeAnalytes <- function(tableTCs, errorList, catList = NULL, catLabels = NULL, distTypes = TRUE){
 	
 	# check input parameters	
 	stopifnot(is.data.frame(tableTCs))
@@ -1218,7 +1191,6 @@ mergeAnalytes <- function(tableTCs, errorList, catList = NULL, catLabels = NULL,
 	stopifnot(!is.null(catList))
 	stopifnot(length(catList) == length(catLabels))
 	stopifnot(is.logical(distTypes))
-
 	
 	subsetList <- NULL
 	
@@ -1254,12 +1226,11 @@ mergeAnalytes <- function(tableTCs, errorList, catList = NULL, catLabels = NULL,
 	}
 	names(subsetList) <- catLabels
 	
-	return(subsetList)
-	
+	return(subsetList)	
 }
 
 
-#'Helper function to combine all computed summary errors 
+#' Helper function to combine all computed summary errors 
 #' 
 #' @param errorList		(list) of the error lists for the different methods for which the summary errors should be combined
 #' @param nameVec		(character) vector specifying the names of the methods 
@@ -1303,7 +1274,6 @@ mergeSummaryErrors <- function(errorList, nameVec, errorParam = "MedianAbsPercEr
 }
 
 
-
 #' Computing benchmark table with the mean overall results.
 #' 
 #' @param errorList 		(list) containing the the computed errors for the different (indirect) methods/algorithms
@@ -1321,7 +1291,7 @@ mergeSummaryErrors <- function(errorList, nameVec, errorParam = "MedianAbsPercEr
 #'
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-getBenchmarkResults <- function(errorList, nameVec, tableTCs, errorParam ="zzDevAbsCutoff_Ov", cutoffZ = 5, 
+getBenchmarkResults <- function(errorList, nameVec, tableTCs, errorParam = "zzDevAbsCutoff_Ov", cutoffZ = 5, 
 		catList = c("fractionPathol <= 0.20 & N <= 5000", "fractionPathol <= 0.20 & N > 5000", 
 					"fractionPathol >  0.20 & N <= 5000", "fractionPathol >  0.20 & N > 5000"), 
 		catLabels = c("lowPlowN", "lowPhighN", "highPlowN", "highPhighN"), perfCombination = c("mean", "median", "sum")){
@@ -1441,7 +1411,8 @@ computeSubResults <- function(errorDf, tableTCs, distCat, errorParam, catList, c
 #' @return (list) with (data frame) and a (list) with the computed performance measures  
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
-readResultsAndComputeErrors <- function(workingDir = getwd(), algoName = NULL, subset="all", cutoffZ = 5, ...){
+
+readResultsAndComputeErrors <- function(workingDir = getwd(), algoName = NULL, subset = "all", cutoffZ = 5, ...){
 	
 	args = list(...)
 	# check input parameters 
@@ -1523,3 +1494,5 @@ readResultsAndComputeErrors <- function(workingDir = getwd(), algoName = NULL, s
 	
 	return(list(perfDf = perfMeasAlgo, perfList = errorAlgo))
 }
+
+

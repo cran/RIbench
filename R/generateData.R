@@ -1,18 +1,18 @@
-#' Convenience function to generate simulated data with one start seed for each biomarker and save each test set as a separate file
+#' Convenience function to generate simulated data and save each test set as a separate file
 #' 
-#' @param workingDir	(character) specifying the working directory from which a ./Data directory will be generated
+#' @param workingDir	(character) specifying the working directory where 'workingDir/Data/biomarker' folders will be generated containing the simulated data
 #' @param subset		(character, numeric, or data.frame) to specify for which subset the data should be generated and the algorithms later applied to.
 #' 								character options:	'all' (default) for all test sets;
 #' 												a distribution type: 'normal', 'skewed', 'heavilySkewed', 'shifted'; 
 #' 												a biomarker: 'Hb', 'Ca', 'FT4', 'AST', 'LACT', 'GGT', 'TSH', 'IgE', 'CRP', 'LDH'; 
 #' 												'Runtime' for runtime analysis subset; 					
 #' 								numeric option: number of test sets per biomarker, e.g. 10;
-#' 								data.frame: customized subset of table with test set specifications 
-#' @param rounding		(logical) indicating whether decimal places stated in test set specifications should be applied (default, TRUE), 
-#' 							if FALSE, data will be rounded to 5 decimal places to mimic not rounded data
-#' @param verbose		(logical) indictaing if the progress counter should be shown (default: TRUE)
+#' 								data.frame: customized subset of table with test set specification 
+#' @param rounding		(logical) indicating whether decimal places stated in test set specification should be applied (default, TRUE), 
+#' 							if FALSE, data will be rounded to 5 decimal places to mimic unrounded data
+#' @param verbose		(logical) indicating if the progress counter should be shown (default: TRUE)
 #' 
-#' @return  No return value, instead the data files are generated amd saved in the workingDir
+#' @return  No return value, instead the data files are generated and saved in the workingDir
 #'
 #' 
 #' @examples
@@ -30,15 +30,14 @@
 #' 
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
 
-generateBiomarkerTestSets <- function(workingDir = "", subset = "all", rounding = TRUE, verbose =TRUE){
+generateBiomarkerTestSets <- function(workingDir = "", subset = "all", rounding = TRUE, verbose = TRUE){
 	
 	# check input parameters
 	stopifnot(is.character(workingDir))
 	stopifnot(is.character(subset) | is.numeric(subset) | is.data.frame(subset))
 	stopifnot(is.logical(rounding))
 	stopifnot(is.logical(verbose))
-	
-	
+		
 	# get testset definitions for the specified subset
 	if (is.character(subset)) {
 		
@@ -72,8 +71,7 @@ generateBiomarkerTestSets <- function(workingDir = "", subset = "all", rounding 
 		
 		# generate files
 		generateDataFiles(tableTCs = tableTCs, outputDir = workingDir, rounding = rounding)
-		
-		
+				
 	} else if (is.numeric(subset)) {
 		stopifnot(subset >= 1 & subset <= 576)
 		# define subset with N 
@@ -101,24 +99,23 @@ generateBiomarkerTestSets <- function(workingDir = "", subset = "all", rounding 
 		}
 		# generate files
 		generateDataFiles( tableTCs = subset, outputDir = workingDir, rounding = rounding, verbose = verbose)		
-	}
-		
+	}		
 }
 
 
-
-#' Generate simulated data with one start seed for each biomarker and save each testcase as separate file
+#' Generate simulated data with one start seed for each biomarker and save each test set as separate file
 #' 
 #' @param tableTCs		(data.frame) containing all information about the simulated test cases 
 #' @param outputDir		(character) specifying the output directory where the data files should be written to
 #' @param rounding		(logical) indicating whether decimal places stated in tableTCs should be applied (default, TRUE), 
-#' 							if FALSE, data will be rounded to 5 decimal places to mimic not rounded data
-#' @param verbose		(logical) indictaing if the progress counter should be shown (default: TRUE)
+#' 							if FALSE, data will be rounded to 5 decimal places to mimic unrounded data
+#' @param verbose		(logical) indicating if the progress counter should be shown (default: TRUE)
 #' 
 #' @return  No return value, instead the data files are generated
 #'
 #' @author Tatjana Ammer \email{tatjana.ammer@@roche.com}
-generateDataFiles <- function( tableTCs = NULL, outputDir = NULL, rounding = TRUE, verbose = TRUE){
+
+generateDataFiles <- function(tableTCs = NULL, outputDir = NULL, rounding = TRUE, verbose = TRUE){
 
 	# check input parameters
 	stopifnot(is.data.frame(tableTCs))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generateData.R
 \name{generateDataFiles}
 \alias{generateDataFiles}
-\title{Generate simulated data with one start seed for each biomarker and save each testcase as separate file}
+\title{Generate simulated data with one start seed for each biomarker and save each test set as separate file}
 \usage{
 generateDataFiles(
   tableTCs = NULL,
@@ -17,15 +17,15 @@ generateDataFiles(
 \item{outputDir}{(character) specifying the output directory where the data files should be written to}
 
 \item{rounding}{(logical) indicating whether decimal places stated in tableTCs should be applied (default, TRUE), 
-if FALSE, data will be rounded to 5 decimal places to mimic not rounded data}
+if FALSE, data will be rounded to 5 decimal places to mimic unrounded data}
 
-\item{verbose}{(logical) indictaing if the progress counter should be shown (default: TRUE)}
+\item{verbose}{(logical) indicating if the progress counter should be shown (default: TRUE)}
 }
 \value{
 No return value, instead the data files are generated
 }
 \description{
-Generate simulated data with one start seed for each biomarker and save each testcase as separate file
+Generate simulated data with one start seed for each biomarker and save each test set as separate file
 }
 \author{
 Tatjana Ammer \email{tatjana.ammer@roche.com}

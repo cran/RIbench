@@ -12,14 +12,14 @@ options(width=200)
 #  workingDir <- tempdir()
 #  
 #  # generate all test sets
-#  generateBiomarkerTestSets(workingDir=workingDir)
+#  generateBiomarkerTestSets(workingDir = workingDir)
 #  
 #  # evaluate all test sets using existing or new indirect method ('myOwnAlgo')
 #  #    with pre-specified R-function ('estimateModel') (provided by the user)
-#  evaluateBiomarkerTestSets(workingDir=workingDir, algoName='myOwnAlgo', algoFunction='estimateModel', libs=c('myOwnAlgo'))
+#  evaluateBiomarkerTestSets(workingDir = workingDir, algoName = 'myOwnAlgo', algoFunction = 'estimateModel', libs = c('myOwnAlgo'))
 #  
 #  # evaluate all results, create plots and compute the benchmark score
-#  benchmarkScore <- evaluateAlgorithmResults(workingDir=workingDir, algoNames="myOwnAlgo")
+#  benchmarkScore <- evaluateAlgorithmResults(workingDir = workingDir, algoNames = "myOwnAlgo")
 #  
 
 ## ----load_testsetDef, echo=TRUE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -32,6 +32,7 @@ str(testsets)
 ## ----generate_testsets, echo=TRUE, eval  =FALSE-------------------------------------------------------------------------------------------------------------------------------------------------------
 #  # set directory from where a ./Data folder will be generated
 #  workingDir <- tempdir()
+#  print(workingDir)
 #  # generate all test sets
 #  generateBiomarkerTestSets(workingDir = workingDir)
 #  
@@ -64,14 +65,14 @@ str(testsets)
 #  # load R-package with the indirect method to be investigated
 #  library(myOwnAlgo)
 #  
-#  estimateRIs <- function(Data = NULL, percentiles = c(0.025,0.975), ... ){
+#  estimateRIs <- function(Data = NULL, percentiles  = c(0.025,0.975), ... ){
 #  	
 #  # PLACEHOLDER: insert your own function to estimate reference intervals here
 #  	
 #  # Initialize a data frame with the specified percentiles and fill the PointEst column with the corresponding
 #  # estimates obtained by your own method (RIResultMyOwnAlgo)
 #  	
-#  	RIResult          <- data.frame(Percentile=percentiles, PointEst=NA)
+#  	RIResult          <- data.frame(Percentile = percentiles, PointEst = NA)
 #  	RIResult$PointEst <- RIResultMyOwnAlgo
 #  	
 #  	return(RIResult)
@@ -174,7 +175,7 @@ str(testsets)
 #  	RIResultMyOwnAlgo <- findPerc(Data)
 #  	
 #  	# save estimations into required format
-#  	RIResult          <- data.frame(Percentile=percentiles, PointEst=RIResultMyOwnAlgo)
+#  	RIResult          <- data.frame(Percentile = percentiles, PointEst = RIResultMyOwnAlgo)
 #  	
 #  	return(RIResult)
 #  }
@@ -182,15 +183,15 @@ str(testsets)
 #  
 #  # set requirePercentile to TRUE and specify the file that contains the R code for the wrapper function
 #  #    for the direct estimation of reference intervals / percentiles
-#  evaluateBiomarkerTestSets(workingDir=workingDir, algoName="myOwnAlgo", algoFunction="estimateRIs",
-#  		libs="myOwnAlgo", sourceFiles = "Test_RIEst.R",
-#  		requirePercentiles=TRUE)
+#  evaluateBiomarkerTestSets(workingDir = workingDir, algoName = "myOwnAlgo", algoFunction = "estimateRIs",
+#  		libs = "myOwnAlgo", sourceFiles = "Test_RIEst.R",
+#  		requirePercentiles = TRUE)
 #  
 
 ## ----eval_results_moreAlgos, echo=TRUE, eval =FALSE---------------------------------------------------------------------------------------------------------------------------------------------------
 #  # Using default parameters, this re-produces the figures shown in Ammer et al., 2022.
 #  # As the results for the different algorithms do not exists, this evaluation does not work and just shows an exemplary call of the function.
-#  evaluateAlgorithmResults(workingDir=workingDir, algoNames=c("Hoffmann", "TML", "kosmic", "TMC", "refineR"))
+#  evaluateAlgorithmResults(workingDir = workingDir, algoNames = c("Hoffmann", "TML", "kosmic", "TMC", "refineR"))
 #  
 
 ## ----eval_results, echo=TRUE, eval =FALSE-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -231,12 +232,12 @@ str(testsets)
 #  workingDir <- tempdir()
 #  
 #  # generate all test sets
-#  generateBiomarkerTestSets(workingDir=workingDir, subset =3)
+#  generateBiomarkerTestSets(workingDir = workingDir, subset = 3)
 #  
 #  # evaluate all test sets using existing or new indirect method ('myOwnAlgo') with pre-specified R-function ('estimateModel')
-#  evaluateBiomarkerTestSets(workingDir=workingDir, algoName='refineR', algoFunction='findRI', libs=c('refineR'), subset = 3)
+#  evaluateBiomarkerTestSets(workingDir = workingDir, algoName = 'refineR', algoFunction = 'findRI', libs = c('refineR'), subset = 3)
 #  
 #  # evaluate all results, create plots and compute the benchmark score
-#  benchmarkScore <- evaluateAlgorithmResults(workingDir=workingDir, algoNames="refineR", subset = 3)
+#  benchmarkScore <- evaluateAlgorithmResults(workingDir = workingDir, algoNames = "refineR", subset = 3)
 #  
 

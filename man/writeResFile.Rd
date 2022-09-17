@@ -15,7 +15,7 @@ writeResFile(
 )
 }
 \arguments{
-\item{algoName}{(character) specifying the algorithm that should be called}
+\item{algoName}{(character) specifying the name of the algorithm that is evaluated}
 
 \item{biomarker}{(character) specifying the biomarker for which the algorithm should calculate RIs}
 
