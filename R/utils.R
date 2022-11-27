@@ -305,7 +305,12 @@ generateMD5 <- function(x){
 computeDirect <- function(N=120, analyte, params, seed = 123, NIter = 10000, RIperc = c(0.025, 0.975)){
 	
 	df <- NULL
-	set.seed(seed, kind = "default")
+	
+	if(paste0(R.Version()[c("major","minor")], collapse = ".") >= "3.6.0")
+		suppressWarnings(set.seed(seed, sample.kind="Rounding"))
+	else
+		set.seed(seed, kind = "default")
+	
 	# sample N values using the defined parameters for the non-pathological distribution
 	# and compute specified percentiles
 	for(s in 1:NIter){
@@ -429,7 +434,11 @@ defineSubset <- function(tableTCs = NULL, N = 50, seed = 123){
 	
 	tableTCs$Subset <- 0
 	
-	set.seed(seed, kind = "default")
+	if(paste0(R.Version()[c("major","minor")], collapse = ".") >= "3.6.0")
+		suppressWarnings(set.seed(seed, sample.kind="Rounding"))
+	else
+		set.seed(seed, kind = "default")
+	
 	# traverse analytes and choose N cases for the subset
 	for ( a in analytes){
 		allInd <- tableTCs$Index[tableTCs$Analyte == a]

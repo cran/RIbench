@@ -1,9 +1,9 @@
 #! usr/bin/env Rscript
 
 # load libraries needed to execute this script
-library(optparse)
-library(data.table)
-library(digest)
+suppressWarnings(library(optparse))
+suppressWarnings(library(data.table))
+suppressWarnings(library(digest))
 
 
 # define command line arguments

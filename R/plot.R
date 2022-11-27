@@ -242,10 +242,10 @@ generateBoxplotsMultipleCats <- function(analytes, errorListAll, colList, nameLi
 	stopifnot(is.null(titlePart) | is.character(titlePart))
 	stopifnot(is.null(outputDir) | is.character(outputDir))
 	stopifnot(is.null(filenamePart) | is.character(filenamePart))
-	stopifnot(is.null(ylim1Vec) | is.numeric(ylim1Vec))
-	stopifnot(is.null(ylim2Vec) | is.numeric(ylim2Vec))
-	stopifnot(is.null(yticks1Vec) | is.numeric(yticks1Vec))
-	stopifnot(is.null(yticks2Vec) | is.numeric(yticks2Vec))
+	stopifnot(is.null(ylim1Vec) | is.list(ylim1Vec))
+	stopifnot(is.null(ylim2Vec) | is.list(ylim2Vec))
+	stopifnot(is.null(yticks1Vec) | is.list(yticks1Vec))
+	stopifnot(is.null(yticks2Vec) | is.list(yticks2Vec))
 	
 	# if ylim and ticks are not set, set them to 0 to 2.5 and 2.5 to 100	
 	if(is.null(ylim1Vec)){
@@ -399,10 +399,10 @@ generateBoxplotsDistTypes <- function(errorListAll, colList, nameList, catList, 
 	stopifnot(is.null(titlePart) | is.character(titlePart))
 	stopifnot(is.null(outputDir) | is.character(outputDir))
 	stopifnot(is.null(filenamePart) | is.character(filenamePart))
-	stopifnot(is.null(ylim1Vec) | is.numeric(ylim1Vec))
-	stopifnot(is.null(ylim2Vec) | is.numeric(ylim2Vec))
-	stopifnot(is.null(yticks1Vec) | is.numeric(yticks1Vec))
-	stopifnot(is.null(yticks2Vec) | is.numeric(yticks2Vec))
+	stopifnot(is.null(ylim1Vec) | is.list(ylim1Vec))
+	stopifnot(is.null(ylim2Vec) | is.list(ylim2Vec))
+	stopifnot(is.null(yticks1Vec) | is.list(yticks1Vec))
+	stopifnot(is.null(yticks2Vec) | is.list(yticks2Vec))
 	
 	# set ylim and yticks
 	if(is.null(ylim1Vec)){

@@ -16,8 +16,8 @@
  \tabular{ll}{     
  Package: \tab RIbench \cr
  Type: \tab Package \cr     
- Version: \tab 1.0.1 \cr     
- Date: \tab 2022-09-16 \cr
+ Version: \tab 1.0.2 \cr     
+ Date: \tab 2022-11-25 \cr
  License: \tab GPL (>=3) \cr     
  LazyLoad: \tab yes \cr   
  } 

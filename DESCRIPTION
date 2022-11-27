@@ -1,7 +1,7 @@
 Type: Package
 Package: RIbench
-Version: 1.0.1
-Date: 2022-09-16
+Version: 1.0.2
+Date: 2022-11-25
 Title: Benchmark Suite for Indirect Methods for RI Estimation
 Author: Tatjana Ammer [aut, cre],
   Christopher Rank [aut],
@@ -26,6 +26,6 @@ Description: The provided benchmark suite enables the automated evaluation and c
 License: GPL (>= 3)
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2022-09-16 17:26:25 UTC; ammert
+Packaged: 2022-11-25 15:10:44 UTC; ammert
 Repository: CRAN
-Date/Publication: 2022-09-17 19:56:27 UTC
+Date/Publication: 2022-11-27 17:40:02 UTC

@@ -1,3 +1,11 @@
+# RIbench version 1.0.2
+
+The new version includes the following updates and improvements: 
+
+* Minor adjustments to make the package compatible with R version > 3.6.0 
+
+
+
 # RIbench version 1.0.1 
 
 The new version includes the following updates and improvements: 

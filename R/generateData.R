@@ -134,7 +134,11 @@ generateDataFiles <- function(tableTCs = NULL, outputDir = NULL, rounding = TRUE
 	
 	# get and set seed for new marker
 	seed <- tableTCs[1,]$startSeed
-	set.seed(seed, kind = "default")
+	
+	if(paste0(R.Version()[c("major","minor")], collapse = ".") >= "3.6.0")
+		suppressWarnings(set.seed(seed, sample.kind="Rounding"))
+	else
+		set.seed(seed, kind = "default")
 
 	#set up progress indicator 
 	msgP 		<- gettext("Progress:")
@@ -170,8 +174,12 @@ generateDataFiles <- function(tableTCs = NULL, outputDir = NULL, rounding = TRUE
 			gc() 
 			# get and set seed for new marker
 			seed = allTestsets[allTestsets$Analyte ==as.character(marker), ]$startSeed[1]
-			set.seed(seed, kind = "default")
-			oldMarker <- marker
+			
+			if(paste0(R.Version()[c("major","minor")], collapse = ".") >= "3.6.0")
+				suppressWarnings(set.seed(seed, sample.kind="Rounding"))
+			else
+				set.seed(seed, kind = "default")
+						oldMarker <- marker
 		}
 		
 		# simulate non-pathological distribution
